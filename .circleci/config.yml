@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/project
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec jekyll build
+      - run: bundle exec htmlproofer ./_site --allow-hash-href --check-html --disable-external
+      - run: echo "Build finished!"
+      - run:
+          command: |
+            sudo apt update && sudo apt install -y snapd
+            sudo snap install snapcraft --edge --classic
+            /snap/bin/snapcraft
